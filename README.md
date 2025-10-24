@@ -24,9 +24,8 @@ O problema baseia-se no seguinte conjunto de dados:
 ### Restrições Obrigatórias (Hard Constraints)
 - Cada aula tem duração de 2 horas.
 - Todas as UCs têm 2 aulas por semana.
-- Não mais de 3 aulas por dia por turma.
+- Não mais de 4 aulas por dia por turma.
 - Respeito pela disponibilidade dos docentes.
-- Aulas online (máx. 3) no mesmo dia.
 - Salas específicas para certas UCs.
 
 ### Restrições Preferenciais (Soft Constraints)
