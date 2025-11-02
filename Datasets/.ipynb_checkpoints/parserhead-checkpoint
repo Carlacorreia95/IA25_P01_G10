@@ -1,0 +1,45 @@
+        # Processar dados de cada seção ??
+        if current_section == 'head':
+            # Parser para extrair informações da seção head
+            if '—' in line or '--' in line:
+                # É um comentário, tentar extrair informação
+                if 'classes last' in line.lower():
+                    # Extrair duração das aulas (ex: "2 hours")
+                    words = line.split()
+                    for i, word in enumerate(words):
+                        if word.isdigit() and i+1 < len(words) and 'hour' in words[i+1].lower():
+                            data['head']['class_duration_hours'] = int(word)
+
+                elif 'blocks' in line.lower() and 'day' in line.lower():
+                    # Extrair número de blocos por dia (ex: "4 blocks")
+                    words = line.split()
+                    for i, word in enumerate(words):
+                        if word.isdigit() and i+1 < len(words) and 'block' in words[i+1].lower():
+                            data['head']['blocks_per_day'] = int(word)
+
+                elif 'numbered' in line.lower() and 'to' in line.lower():
+                    # Extrair range de blocos (ex: "1 to 20")
+                    words = line.split()
+                    for i, word in enumerate(words):
+                        if word.isdigit() and i+1 < len(words) and words[i+1].lower() == 'to':
+                            if i+2 < len(words) and words[i+2].isdigit():
+                                data['head']['block_start'] = int(word)
+                                data['head']['block_end'] = int(words[i+2])
+
+                elif 'lessons per week' in line.lower() or 'aulas por semana' in line.lower():
+                    # Extrair número de aulas por semana
+                    words = line.split()
+                    for word in words:
+                        if word.isdigit():
+                            data['head']['lessons_per_week'] = int(word)
+
+                elif 'monday' in line.lower() and 'friday' in line.lower():
+                    # Extrair dias da semana
+                    data['head']['schedule_days'] = 'Monday to Friday'
+                    # Tentar extrair horários (ex: "9am to 4pm")
+                    if 'am' in line.lower() or 'pm' in line.lower():
+                        import re
+                        times = re.findall(r'\d+\s*(?:am|pm)', line, re.IGNORECASE)
+                        if len(times) >= 2:
+                            data['head']['start_time'] = times[0].strip()
+                            data['head']['end_time'] = times[-1].strip()
